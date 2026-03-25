@@ -1,0 +1,52 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib 
+
+#load dataset
+df = sns.load_dataset("titanic")
+
+#check column data types
+#print(df.dtypes)
+
+#convert column type (age to integer)
+df["age"] = df["age"].astype(int, errors = "ignore")
+
+#check column data types
+#print(df.dtypes)
+
+#Group by gender and calculate average age
+avg_age_by_gender = df.groupby("sex")["age"].mean()
+#print(avg_age_by_gender)
+
+#Group by passengerclass and calculate survival rate
+survival_rate_by_class = df.groupby("class")["survived"].mean()
+#print(survival_rate_by_class)
+
+#group by multiple class
+survival_rate= df.groupby(["sex","class"])["survived"].mean()
+#print(survival_rate)
+
+#Aggregate multiple statistics
+agg_stats = df.groupby("class").agg({
+    "age":["mean","median"],
+    "fare":["mean","max"]
+})
+#print(agg_stats)
+
+#sort by age
+sorted_age = df.sort_values("age")
+#print (sorted_age)
+
+#sort by fare in ascending
+sorted_fare = df.sort_values("fare", ascending = False)
+#print (sorted_fare)
+
+#set 'who' column as index
+df_indexed = df.set_index("who")
+#print(df_indexed)
+#print(df_indexed.head())
+
+#Access a row by index
+print(df_indexed.loc["man"].head())
+print(df_indexed.loc["woman"].head())
+print(df_indexed.loc["child"].head())
