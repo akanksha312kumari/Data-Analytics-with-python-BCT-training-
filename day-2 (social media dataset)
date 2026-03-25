@@ -1,0 +1,25 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+#load dataset
+df = pd.read_excel("trending_social_media_today.xlsx")
+#print(df)
+
+#check column data types
+print(df.dtypes)
+
+#convert column type (age to integer)
+df["Estimated Likes"] = df["Estimated Likes"].astype(int)
+print(df.dtypes)
+
+#Group by platform and calculate average likes
+#avg_likes_by_platform = df.groupby("Platform")["Estimated Likes"].mean()
+#print(avg_age_by_gender)
+
+#histogram of passenger ages
+sns.histplot(df["Platform"], bins=20, kde=True)
+plt.title("Most viral postes on different social platforms")
+plt.xlabel("Platform")
+plt.ylabel("Estimated Likes")
+plt.show()
