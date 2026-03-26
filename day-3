@@ -1,0 +1,59 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+#load dataset
+df = sns.load_dataset("titanic")
+
+#Fare vs Age, coloured by survival 
+#sns.scatterplot(x="age", y="fare", hue="survived", data=df)
+#plt.title("Fare vs Age, coloured by survival")
+#plt.xlabel("Age")
+#plt.ylabel("Fare")
+#plt.show()
+
+#Correlation matrix
+#corr= df[["age","fare","survived"]].corr()
+#sns.heatmap(corr, annot=False, cmap="inferno")
+#plt.title("Correlation matrix")
+#plt.show()
+
+#Filling missing values
+df["age"] = df["age"].fillna(df["age"].mean())
+
+#Filling unknown values
+#print(df)
+df["embard_town"]=df["embark_town"].fillna("Unknown")
+#print(df.head())
+
+#Drop rows with missing deck info
+#print(df.isnull().sum())
+#df= df.dropna(subset=["deck"])
+#print(df.isnull().sum())
+
+#Survival rate vy class
+survival_by_class = df.groupby("class")["survived"].mean()
+#print(survival_by_class)
+
+#Survival rate by gender and class
+survival_rate_by_gender_class = df.groupby(["sex","class"])["survived"].mean()
+#print(survival_rate_by_gender_class)
+
+#barplot
+#sns.barplot(x="class", y="survived", data=df)
+#plt.title("Survival rate by class")
+#plt.xlabel("Class")
+#plt.ylabel("Survival rate")
+#plt.show()
+
+#Barplot: survival rate by gender
+#sns.barplot(x="sex", y="survived", data=df)
+#plt.title("Survival rate by gender")
+#plt.xlabel("Gender")
+#plt.ylabel("Survival rate")
+#plt.show()
+
+#Heatmap : survival by gender and class
+pivot = df.pivot_table(index="sex", columns="class", values="survived", aggfunc="mean")
+sns.heatmap(pivot, annot=True, cmap="inferno")
+plt.show()
