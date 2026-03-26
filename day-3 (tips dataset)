@@ -1,0 +1,56 @@
+import seaborn as sns
+import pandas as pd
+
+#Load the Tips dataset
+df= sns.load_dataset("tips")
+
+#Preview the data
+#df.head()
+
+#Check missing values
+#print(df.isnull().sum())
+
+#Check datatypes
+#print(df.dtypes)
+
+#Convert "sex" and "smoker" to category type
+df["sex"] = df["sex"].astype("category")
+df["smoker"] = df["smoker"].astype("category")
+#print(df.dtypes)
+
+#Create a new column: Tip percentage
+df["tip_pct"] = (df["tip"] / df["total_bill"])*100
+#print(df.head())
+
+#Round to two decimal places
+df["tip_pct"] = df["tip_pct"].round(2)
+#print(df.head())
+
+#Preview updated dataFrame
+df[["total_bill","tip","tip_pct"]].head()
+
+#Average tip percentage by gender
+avy_tip_by_gender = df.groupby("sex")["tip_pct"].mean()
+#print(avy_tip_by_gender)
+
+#Average tip percentage by smoker
+avg_tip_by_smoker = df.groupby("smoker")["tip_pct"].mean()
+#print(avg_tip_by_smoker)
+
+#Average tip percentage by day and time
+avg_tip_by_day_time = df.groupby(["day","time"])["tip_pct"].mean().unstack()
+#print(avg_tip_by_day_time)
+
+#Barplot: Tip % by gender
+sns.barplot(x="sex", y="tip_pct", data= df)
+plt.title("Average Tip Percentage by Gender")
+plt.xlabel("Gender")
+plt.ylabel("Tip Percentage")
+plt.show()
+
+#Barplot: Tip % by smoker
+sns.barplot(x="smoker", y="tip_pct", data= df)
+plt.title("Average Tip Percentage by Smoker")
+plt.xlabel("Smoker")
+plt.ylabel("Tip Percentage")
+plt.show()
