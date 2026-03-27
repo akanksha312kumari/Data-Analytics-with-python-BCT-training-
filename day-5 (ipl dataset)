@@ -1,0 +1,26 @@
+import seaborn as sns
+import pandas as pd
+import matplotlib.pyplot as plt
+
+#load dataset
+df = pd.read_excel("ipl_team_performance_2024_2025.xlsx")
+
+
+df["Win_Percentage"] = (df["Wins"] / df["Matches_Played"]) * 100
+df["Performance_Score"] = (
+    0.6 * df["Points"] +        # strongest factor
+    0.3 * df["Win_Percentage"] + 
+    10 * df["Net_Run_Rate"]     # scale up NRR manually
+)
+team_score = df.groupby("Team")["Performance_Score"].mean().reset_index()
+team_score = team_score.sort_values(by="Performance_Score", ascending=False)
+
+print(team_score)
+print("🏆 Predicted Winner:", team_score.iloc[0]["Team"])
+
+#Barplot: Team vs Points
+sns.barplot(x="Team", y="Performance_Score", data= team_score)
+plt.title("IPL performance of different teams")
+plt.xlabel("Team")
+plt.ylabel("Performance")
+plt.show()
