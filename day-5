@@ -1,0 +1,58 @@
+#Handling categorical vs Numerical Data
+
+import pandas as pd
+
+#Sample dataset
+data = {
+    'Name':["Amrita", "Mohit", "Chand", "Dev"],
+    'Gender':["F", "M", "M", "M"],
+    'Age': [25, 30, 35, 40],
+    'Department': ["HR", "IT", "Finance", "IT"]
+}
+
+df= pd.DataFrame(data)
+#print(df)
+
+#Separate categorical and numerical columns
+categorical_cols= df.select_dtypes(include=['object']).columns
+numerical_cols = df.select_dtypes(include=['int64', 'float64']).columns
+#print("Categorical Columns:" , categorical_cols)
+#print("Numerical Columns:" ,numerical_cols)
+
+#Encoding categorical data
+df_encoded = pd.get_dummies(df, columns=['Gender','Department'],drop_first = True)
+#print(df_encoded)
+
+
+
+#FEATURE ENGINEERING BASICS
+#Creating new column : Age Group
+df['Age_Group']= pd.cut(df['Age'], bins=[20, 30, 40, 50], labels=['20-30','30-40', '40-50'])
+#print(df)
+
+
+#transformations
+import numpy as np
+
+#Log transf0rmation (useful for skewed data)
+df['Log_Age'] = np.log(df['Age'])
+#print(df)
+
+
+#Standardization (z-score normalization)
+df['Age_zscore'] = (df['Age'] - df['Age'].mean()) / df['Age'].std()
+#print(df)
+
+#Combining Columns
+df['Employee_ID'] = df['Name'] + "_" + df['Department']
+#print(df)
+
+
+
+#Without drop first
+dummies_all = pd.get_dummies(df, columns=['Gender', 'Department'])
+print(dummies_all)
+
+#With drop first
+dummies_drop = pd.get_dummies(df, columns = ['Gender', 'Department'], drop_first = True)
+print(dummies_drop)
